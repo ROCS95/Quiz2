@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="../Scripts/source.js"></script>
+    <script src="../Scripts/items.js"></script>
+
+
+    <title>Pokémon</title>
+    <link href="Content/bootstrap.css" rel="stylesheet">
+    <link href="Content/site.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #313738;
+        }
+
+        p {
+            color: white;
+        }
+        th {
+            color: white;
+        }
+
+        label {
+            color: white;
+        }
+
+        legend {
+            color: white;
+        }
+
+        #ele {
+            margin: 0 auto;
+            padding: 50px 0;
+        }
+
+        table {
+            margin: 0 auto;
+        }
+
+        .rojo {
+            background-color: red;
+        }
+
+        .azul {
+            background-color: blue;
+        }
+
+        .amarillo {
+            background-color: yellow;
+        }
+
+        .naranja {
+            background-color: orange;
+        }
+
+        .verde {
+            background-color: green;
+        }
+
+        td {
+            width: 40px;
+            height: 40px;
+            text-align: left;
+            color: #757d5f;
+            font-size: 8px;
+            border: solid 1px #313738;
+            background-color: #07889B;
+            border-radius: 4px;
+        }
+
+            td:hover {
+                background-color: rgba(255, 255, 255, 0.8);
+            }
+
+        #tableCandy {
+            margin-top: 10%;
+        }
+    </style>
+
+
+</head>
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        <div >
+            <div class="containerPokemon">
+                <div>
+                    <fieldset>
+                        <legend>Agregar Pokemon:</legend>
+                        <label for="Numero">Numero</label>
+                        <input id="Numero" class="form-control" />
+                        <label for="Nombre">Nombre</label>
+                        <input id="Nombre" class="form-control" />
+                        <label for="TipoPrincipal">TipoPrincipal</label>
+                        <input id="TipoPrincipal" class="form-control" />
+                        <label for="TipoSecundario">TipoSecundario</label>
+                        <input id="TipoSecundario" class="form-control" />
+                        <br>
+                        <button id="savePokemon" class="savePokemon">Guardar</button>
+                    </fieldset>
+
+                    <br />
+                    <br />
+                    <div id="Pokemon" class="table-responsive">
+                        <table style="width:100%" class="table table-bordered" id="pokemons">
+                            <tr>
+                                <th>Id</th>
+                                <th>Numero</th>
+                                <th>Nombre</th>
+                                <th>TipoPrincipal</th>
+                                <th>TipoSecundario</th>
+                                <th>Accion</th>
+                            </tr>
+
+                        </table><br /><br />
+
+                    </div>
+
+                </div>
+
+            </div>
+            </div>
+        </div>
+        <div class="container body-content">
+            <div>
+                <div class="containerItem">
+                    <div>
+                        <fieldset>
+                            <legend>Agregar Item:</legend>
+                            <label for="Nombre">Nombre</label>
+                            <input id="Nombre" class="form-control" />
+                            <label for="Efecto">Efecto</label>
+                            <input id="Efecto" class="form-control" />
+                            <br>
+                            <button id="saveItem" class="saveItem">Guardar</button>
+                        </fieldset>
+
+                        <br />
+                        <br />
+                        <div id="Items" class="table-responsive">
+                            <table style="width:100%" class="table table-bordered">
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nombre</th>
+                                    <th>Efecto</th>
+                                    <th>Accion</th>
+                                </tr>
+
+                            </table><br /><br />
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <footer>
+                <p>Pokimon conpani</p>
+            </footer>
+        </div>
+
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <script src="Scripts/bootstrap.js"></script>
+    <script src="Scripts/modernizr-2.6.2.js"></script>
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            Pokemon.getAll().done(function (Pokemon) {
+                var rows = '';
+                console.log(JSON.stringify(Pokemon));
+                Pokemon.forEach(function (Pokemon) {
+                    rows += '<tr row_id=' + Pokemon.ID + '>';
+                    rows += '<td>' + Pokemon.Numero + '</td>';
+                    rows += '<td>' + Pokemon.Nombre + '</td>';
+                    rows += '<td>' + Pokemon.TipoPrincipal + '</td>';
+                    rows += '<td>' + Pokemon.TipoSecundario + '</td>';
+                    rows += '<td><a class="deletePokemon" id=' + Pokemon.ID + ' href="#">Eliminar</a></td>';
+                    rows += '</tr>';
+                });
+                $('#pokemons').append(rows);
+            });
+        })
+
+        $(document).ready(function () {
+            $(document).on("click", ".deletePokemon", function (e) {
+                e.preventDefault();
+                var id = $(this).attr('id');
+                Pokemon.delete(id).done(function () {
+                    $('tr[row_id=' + id + ']').remove();
+                }).fail(function (error) {
+                    console.log(error);
+                    alert("Ha ocurrido un error");
+                });
+
+            });
+        });
+
+        $(document).ready(function () {
+            $('#savePokemon').click(function () {
+                //crea un var para guardar los datos que están en los inputs de la vista.
+                var pokemonDTO = {
+                    Numero: $('#Numero').val(),
+                    Nombre: $('#Nombre').val(),
+                    TipoPrincipal: $('#TipoPrincipal').val(),
+                    TipoSecundario: $('#TipoSecundario').val()
+                };
+                //llama al objeto Resource creado en el resource.js,
+                //llama al create y le pasamos el var donde guardamos los datos de la vista
+                //al .done es para devolver los datos despues de la llamada ajax y así agregarlos a la tabla con el .append
+                Pokemon.create(pokemonDTO).done(function (Pokemon) {
+                    var rows = '';
+                    rows += '<tr>';
+                    rows += '<td>' + Pokemon.Numero + '</td>';
+                    rows += '<td>' + Pokemon.Nombre + '</td>';
+                    rows += '<td>' + Pokemon.TipoPrincipal + '</td>';
+                    rows += '<td>' + Pokemon.TipoSecundario + '</td>';
+                    rows += '</tr>';
+                    $('#pokemons').append(rows);
+                }).fail(function (error) {
+                    console.log(error);
+                    alert("Ha ocurrido un error");
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            Item.getAll().done(function (Pokemon) {
+                var rows = '';
+                console.log(JSON.stringify(Pokemon));
+                Pokemon.forEach(function (Pokemon) {
+                    rows += '<tr row_id=' + Item.ID + '>';
+                    rows += '<td>' + Item.Nombre + '</td>';
+                    rows += '<td>' + Item.Efecto + '</td>';
+                    rows += '<td><a class="deleteItem" id=' + Item.ID + ' href="#">Eliminar</a></td>';
+                    rows += '</tr>';
+                });
+                $('#Items').append(rows);
+            });
+        })
+
+        $(document).ready(function () {
+            $(document).on("click", ".deleteItem", function (e) {
+                e.preventDefault();
+                var id = $(this).attr('id');
+                Item.delete(id).done(function () {
+                    $('tr[row_id=' + id + ']').remove();
+                }).fail(function (error) {
+                    console.log(error);
+                    alert("Ha ocurrido un error");
+                });
+
+            });
+        });
+
+        $(document).ready(function () {
+            $('#saveItem').click(function () {
+                //crea un var para guardar los datos que están en los inputs de la vista.
+                var ItemDTO = {
+                    Nombre: $('#Nombre').val(),
+                    Efecto: $('#Efecto').val(),
+
+                };
+                //llama al objeto Resource creado en el resource.js,
+                //llama al create y le pasamos el var donde guardamos los datos de la vista
+                //al .done es para devolver los datos despues de la llamada ajax y así agregarlos a la tabla con el .append
+                Pokemon.create(ItemDTO).done(function (Item) {
+                    var rows = '';
+                    rows += '<tr>';
+                    rows += '<td>' + Item.Nombre + '</td>';
+                    rows += '<td>' + Item.Efecto + '</td>';
+                    rows += '</tr>';
+                    $('#ItemS').append(rows);
+                }).fail(function (error) {
+                    console.log(error);
+                    alert("Ha ocurrido un error");
+                });
+            });
+        });
+    </script>
+
+
+</body>
+</html>
